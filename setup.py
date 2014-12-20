@@ -13,13 +13,9 @@ setuptools.setup(
 
   description=open('README.rst').read(),
 
-  entry_points={
-    'console_scripts': [
-      'cast-example = clicast.controller:main',
-    ],
-  },
-
-  install_requires=[],
+  install_requires=[
+    'requests',
+  ],
 
   license='MIT',
 
@@ -28,6 +24,8 @@ setuptools.setup(
   include_package_data=True,
 
   setup_requires=['setuptools-git'],
+
+  scripts=['bin/cast-example'],
 
   classifiers=[
     'Development Status :: 5 - Production/Stable',

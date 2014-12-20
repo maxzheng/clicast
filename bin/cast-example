@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+
+from clicast import check_message
+
+
+def main():
+  check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast')
+
+  print "Hello World!"
+
+
+if __name__ == '__main__':
+  main()
