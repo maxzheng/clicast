@@ -21,7 +21,6 @@ As easy as 1-2-3:
 .. code::
   from clicast import check_message
 
-
   def main():
     check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast',
                   allow_exit=True,
