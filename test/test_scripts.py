@@ -3,8 +3,8 @@ import pytest
 import subprocess
 
 
-@pytest.mark.parametrize("script", ['cast-example'])
-def test_script_sanity(script):
+@pytest.mark.parametrize("script", [])
+def test_script(script):
 
   try:
     subprocess.check_output([script, '-h'], stderr=subprocess.STDOUT)

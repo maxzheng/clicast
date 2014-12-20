@@ -25,7 +25,7 @@ setuptools.setup(
 
   setup_requires=['setuptools-git'],
 
-  scripts=['bin/cast-example'],
+#  scripts=['bin/cast-example'],
 
   classifiers=[
     'Development Status :: 5 - Production/Stable',
