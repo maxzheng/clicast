@@ -6,7 +6,7 @@ import setuptools
 
 setuptools.setup(
   name='clicast',
-  version='0.1.3',
+  version='0.1.4',
 
   author='Max Zheng',
   author_email='mzheng@linkedin.com',
