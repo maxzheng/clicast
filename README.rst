@@ -18,7 +18,7 @@ As easy as 1-2-3:
 3. Import and call check_message::
 
   from clicast import check_message
-  def main():
+  def main()\:
     check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast',
                   allow_exit=True,
                   header='=' * 80,
