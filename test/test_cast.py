@@ -6,9 +6,9 @@ from clicast.cast import Cast, CastReader
 
 
 def casts():
-  cast_file = os.path.join(os.path.dirname(__file__), 'test.cast')
+  cast_file = os.path.join(os.path.dirname(__file__), 'example.cast')
   return [Cast.from_file(cast_file),
-          Cast.from_url('https://raw.githubusercontent.com/maxzheng/clicast/master/test/test.cast')]
+          Cast.from_url('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast')]
 
 
 class TestCast(object):

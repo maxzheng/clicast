@@ -4,7 +4,7 @@ from clicast import check_message
 
 
 def main():
-  check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast',
+  check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast',
                 allow_exit=False,
                 raises=True,
                 header='=' * 80,

@@ -15,7 +15,7 @@ As easy as 1-2-3:
   pip install clicast
 
 2. Create your own cast file and make it accessible as an URL.
-   I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast
+   I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast
 
 3. Import and call check_message
 
@@ -24,7 +24,7 @@ As easy as 1-2-3:
   from clicast import check_message
 
   def main():
-    check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast',
+    check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast',
                   allow_exit=True,
                   header='=' * 80,
                   footer='=' * 80)
