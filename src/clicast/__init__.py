@@ -21,6 +21,6 @@ def check_message(url, allow_exit=False, raises=False, **show_kwargs):
 
     if allow_exit and cast.alert_exit:
       sys.exit(1)
-  except Exception as e:
+  except Exception:
     if raises:
       raise

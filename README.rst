@@ -4,7 +4,7 @@ clicast
 Broadcast messages for CLI tools, such as a warning for critical bug or notification about new features.
 
 How to Use
--------------------------
+----------
 
 As easy as 1-2-3:
 
@@ -31,7 +31,7 @@ As easy as 1-2-3:
     # argparse / your code below
 
 Try It Out
--------------------------
+----------
 
 Don't even want to write the bin script to try? I got you covered! :)
 

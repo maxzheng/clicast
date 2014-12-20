@@ -65,7 +65,6 @@ class Cast(object):
 
     return cls(alert_msg, alert_exit, messages)
 
-
   @classmethod
   def from_file(cls, cast_file):
     """ Create a :class:`Cast` from the given file. """
@@ -78,7 +77,6 @@ class Cast(object):
     response = requests.get(cast_url)
     response.raise_for_status()
     return cls.from_string(response.text)
-
 
 
 class CastReader(object):
