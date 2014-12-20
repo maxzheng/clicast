@@ -35,10 +35,13 @@ Try It Out
 
 Don't even want to write the bin script to try? I got you covered! :)
 
-If you run cast-example for the first time, you will see::
+.. code::
 
   $ wget https://raw.githubusercontent.com/maxzheng/clicast/master/bin/cast-example
   $ chmod +x cast-example
+
+If you run cast-example for the first time, you will see::
+
   $ ./cast-example
   ================================================================================
   We found a big bad bug. Please try not to step on it!! Icky...
