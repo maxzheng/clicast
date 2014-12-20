@@ -94,21 +94,25 @@ class CastReader(object):
     msgs = self.new_messages()
 
     if msgs:
-      if header:
-        msgs.insert(0, header)
-      if footer:
-        msgs.append(footer)
+      if logger:
+        if header:
+          logger.info(header)
+        for msg in msgs:
+            logger.info(msg)
+        if footer:
+          logger.info(footer)
 
-      for msg in msgs:
-        if logger:
-          logger.info(msg)
-        else:
-          print msg
+      else:
+        if header:
+          print header
+        print '\n\n'.join(msgs)
+        if footer:
+          print footer
 
   def new_messages(self, mark_as_read=True):
     """
     :param bool mark_as_read: Mark new messages as read
-    :ret list(str): List of new messages
+    :ret list(str): List of new messages with alert being the first if any.
     """
     read_keys = self._read_msg_keys()
     new_messages = [m for m in self.cast.messages if m.key not in read_keys]
@@ -116,7 +120,12 @@ class CastReader(object):
     if new_messages and mark_as_read:
       self._mark_as_read(new_messages)
 
-    return [m.message for m in new_messages]
+    msgs = [m.message for m in new_messages]
+
+    if self.cast.alert:
+      msgs.insert(0, self.cast.alert)
+
+    return msgs
 
   def _read_msg_keys(self):
     """ Set of read messages. """

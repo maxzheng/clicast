@@ -5,9 +5,10 @@ from clicast import check_message
 
 def main():
   check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast',
-                allow_exit=True,
-                header='-' * 80,
-                footer='-' * 80)
+                allow_exit=False,
+                raises=True,
+                header='=' * 80,
+                footer='=' * 80)
 
   print "Hello World!"
 
