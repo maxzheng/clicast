@@ -8,23 +8,24 @@ How to Use
 
 As easy as 1-2-3:
 
-1. Install::
+#1 Install::
 
   pip install clicast
 
-2. Create your own cast file and make it accessible as an URL.
+#2 Create your own cast file and make it accessible as an URL.
    I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast
 
-3. Import and call check_message::
+#3 Import and call check_message::
 
   from clicast import check_message
-  def main()\:
+
+  def main():
     check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast',
                   allow_exit=True,
                   header='=' * 80,
                   footer='=' * 80)
 
-If you run the included `bin/cast-example` for the first time, you will see::
+If you run the included `bin/cast-example`_ for the first time, you will see::
 
   $ cast-example
   ================================================================================
@@ -61,4 +62,4 @@ Github project: https://github.com/maxzheng/clicast
 
 Report issues/bugs: https://github.com/maxzheng/clicast/issues
 
-.. `bin/cast-example`:  https://raw.githubusercontent.com/maxzheng/clicast/master/bin/cast-example
+.. _bin/cast-example:  https://raw.githubusercontent.com/maxzheng/clicast/master/bin/cast-example
