@@ -28,6 +28,7 @@ As easy as 1-2-3:
                   allow_exit=True,
                   header='=' * 80,
                   footer='=' * 80)
+    # argparse / your code below
 
 If you run the included `bin/cast-example`_ for the first time, you will see::
 
