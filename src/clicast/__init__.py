@@ -1,7 +1,7 @@
 from clicast.cast import Cast, CastReader
 
 
-def check_message(url, allow_exit=False, silent=False):
+def check_message(url, allow_exit=False, silent=False, **show_kwargs):
   """
   Check remote url for new messages and display them.
 
@@ -9,11 +9,12 @@ def check_message(url, allow_exit=False, silent=False):
   :param bool allow_exit: Perform sys.exit(1) if cast requests it.
   :param bool silent: Don't raise exception for failed to download/parse cast file or such.
                       Recommended to set this to True for production / in non-debug mode.
+  :param dict show_kwargs: kwargs to be passed to :meth:`CastReader.show_messages`
   """
 
   try:
     reader = CastReader(Cast.from_url(url))
-    reader.show_messages()
+    reader.show_messages(**show_kwargs)
   except Exception as e:
     if not silent:
       raise

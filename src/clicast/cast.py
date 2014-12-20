@@ -21,13 +21,13 @@ class Cast(object):
 
   class CastMessage(object):
     """ Represents a single message in a cast. """
-    def __init__(self, key, msg):
+    def __init__(self, key, message):
       """
       :param str key: Message key
-      :param str msg: The actual message
+      :param str message: The actual message
       """
       self.key = key
-      self.msg = msg
+      self.message = message
 
   def __init__(self, alert=None, alert_exit=False, messages=None):
     """
@@ -37,7 +37,7 @@ class Cast(object):
     """
     self.alert = alert
     self.alert_exit = alert_exit
-    self.messages = messages and [CastMessage(*m) for m in messages] or []
+    self.messages = messages and [self.CastMessage(*m) for m in messages] or []
 
   @classmethod
   def from_string(cls, cast):
@@ -53,15 +53,15 @@ class Cast(object):
     alert_msg = None
     alert_exit = None
 
-    for key, value in parser.items(ALERT_SECTTION):
-      if ALERT_MSG_KEY == key:
+    for key, value in parser.items(cls.ALERT_SECTION):
+      if cls.ALERT_MSG_KEY == key:
         alert_msg = value
-      elif ALERT_EXIT_KEY == key:
+      elif cls.ALERT_EXIT_KEY == key:
         alert_exit = bool(value)
       else:
-        raise CastError('Invalid key "%s" in %s section', key, ALERT_SECTION)
+        raise CastError('Invalid key "%s" in %s section', key, cls.ALERT_SECTION)
 
-    messages = parser.items(MESSAGES_SECTION)
+    messages = parser.items(cls.MESSAGES_SECTION)
 
     return cls(alert_msg, alert_exit, messages)
 
@@ -122,17 +122,17 @@ class CastReader(object):
     """ Set of read messages. """
 
     try:
-      with open(READ_MSG_FILE) as fp:
+      with open(self.READ_MSG_FILE) as fp:
         read_keys = fp.read()
         return set(read_keys.split())
     except Exception:
-      return []
+      return set()
 
   def _mark_as_read(self, messages):
     """ Mark the given list of :class:`CastMessage` as read. """
 
-    keys = self._read_msg_keys
-    keys.update(messages)
+    keys = self._read_msg_keys()
+    keys.update(m.key for m in messages)
 
-    with open(READ_MSG_FILE, 'w') as fp:
+    with open(self.READ_MSG_FILE, 'w') as fp:
       fp.write(' '.join(keys))
