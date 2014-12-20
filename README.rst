@@ -30,9 +30,12 @@ As easy as 1-2-3:
                   footer='=' * 80)
     # argparse / your code below
 
-If you run the included `bin/cast-example`_ for the first time, you will see::
+Don't even want to write the bin script to try? I got you covered! :)
+If you run cast-example for the first time, you will see::
 
-  $ cast-example
+  $ wget https://raw.githubusercontent.com/maxzheng/clicast/master/bin/cast-example
+  $ chmod +x cast-example
+  $ ./cast-example
   ================================================================================
   We found a big bad bug. Please try not to step on it!! Icky...
   No worries. It will be fixed soon! :)
@@ -66,5 +69,3 @@ Contribute / Report Bugs
 Github project: https://github.com/maxzheng/clicast
 
 Report issues/bugs: https://github.com/maxzheng/clicast/issues
-
-.. _bin/cast-example:  https://raw.githubusercontent.com/maxzheng/clicast/master/bin/cast-example
