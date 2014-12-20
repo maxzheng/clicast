@@ -8,14 +8,18 @@ How to Use
 
 As easy as 1-2-3:
 
-#1 Install::
+1. Install
+
+.. code::
 
   pip install clicast
 
-#2 Create your own cast file and make it accessible as an URL.
+2. Create your own cast file and make it accessible as an URL.
    I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/example.cast
 
-#3 Import and call check_message::
+3. Import and call check_message
+
+.. code::
 
   from clicast import check_message
 
