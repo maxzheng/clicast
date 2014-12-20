@@ -30,6 +30,9 @@ As easy as 1-2-3:
                   footer='=' * 80)
     # argparse / your code below
 
+Try It Out
+-------------------------
+
 Don't even want to write the bin script to try? I got you covered! :)
 If you run cast-example for the first time, you will see::
 
