@@ -10,25 +10,24 @@ As easy as 1-2-3:
 
 1. Install
 
-.. code::
+   .. code::
 
-  pip install clicast
+     pip install clicast
 
 2. Create your own cast file and make it accessible as an URL.
    I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast
 
 3. Import and call check_message
 
-.. code::
+   .. code::
 
-  from clicast import check_message
+     from clicast import check_message
 
-  def main():
-    check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast',
-                  allow_exit=True,
-                  header='=' * 80,
-                  footer='=' * 80)
-    # argparse / your code below
+     def main():
+        check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast',
+                      allow_exit=True,
+                      header='=' * 80,
+                      footer='=' * 80)
 
 Try It Out
 ----------
