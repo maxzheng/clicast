@@ -345,16 +345,15 @@ ul.auto-toc {
 <div class="section" id="how-to-use">
 <h1>How to Use</h1>
 <p>As easy as 1-2-3:</p>
-<ol class="arabic">
-<li><p class="first">Install</p>
+<p>1. Install</p>
 <pre class="code literal-block">
 pip install clicast
 </pre>
-</li>
-<li><p class="first">Create your own cast file and make it accessible as an URL.
-I.e. <a class="reference external" href="https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast">https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast</a></p>
-</li>
-<li><p class="first">Import and call check_message</p>
+<dl class="docutils">
+<dt>2. Create your own cast file and make it accessible as an URL.</dt>
+<dd>I.e. <a class="reference external" href="https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast">https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast</a></dd>
+</dl>
+<p>3. Import and call check_message</p>
 <pre class="code literal-block">
 from clicast import check_message
 
@@ -364,8 +363,6 @@ def main():
                  header='=' * 80,
                  footer='=' * 80)
 </pre>
-</li>
-</ol>
 </div>
 <div class="section" id="try-it-out">
 <h1>Try It Out</h1>
@@ -377,7 +374,7 @@ $ chmod +x cast-example
 <p>If you run cast-example for the first time, you will see:</p>
 <pre class="literal-block">
 $ ./cast-example
-\================================================================================
+================================================================================
 We found a big bad bug. Please try not to step on it!! Icky...
 No worries. It will be fixed soon! :)
 
@@ -391,16 +388,16 @@ Version 0.2 has been released! If you upgrade, you will get:
 So what are you waiting for? :)
 
 There is a small bug over there, so watch out!
-\================================================================================
+================================================================================
 Hello World!
 </pre>
 <p>And run it again:</p>
 <pre class="literal-block">
 $ cast-example
-\================================================================================
+================================================================================
 We found a big bad bug. Please try not to step on it!! Icky...
 No worries. It will be fixed soon! :)
-\================================================================================
+================================================================================
 Hello World!
 </pre>
 <p>That's it!</p>
