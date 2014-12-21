@@ -55,7 +55,7 @@ If you run cast-example for the first time, you will see::
 
 And run it again::
 
-    $ cast-example
+    $ ./cast-example
     ================================================================================
     We found a big bad bug. Please try not to step on it!! Icky...
     No worries. It will be fixed soon! :)
