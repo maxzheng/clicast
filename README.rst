@@ -8,22 +8,18 @@ How to Use
 
 As easy as 1-2-3:
 
-\1. Install
+1. Install::
 
-.. code::
+    pip install clicast
 
- pip install clicast
-
-\2. Create your own cast file and make it accessible as an URL.
+2. Create your own cast file and make it accessible as an URL.
    I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast
 
-\3. Import and call check_message
+3. Import and call check_message::
 
-.. code::
+    from clicast import check_message
 
- from clicast import check_message
-
- def main():
+    def main():
     check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast',
                   allow_exit=True,
                   header='=' * 80,
@@ -32,9 +28,7 @@ As easy as 1-2-3:
 Try It Out
 ----------
 
-Don't even want to write the bin script to try? I got you covered! :)
-
-.. code::
+Don't even want to write the bin script to try? I got you covered! :) ::
 
     $ wget https://raw.githubusercontent.com/maxzheng/clicast/master/bin/cast-example
     $ chmod +x cast-example
