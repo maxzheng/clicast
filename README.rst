@@ -36,37 +36,37 @@ Don't even want to write the bin script to try? I got you covered! :)
 
 .. code::
 
-  $ wget https://raw.githubusercontent.com/maxzheng/clicast/master/bin/cast-example
-  $ chmod +x cast-example
+    $ wget https://raw.githubusercontent.com/maxzheng/clicast/master/bin/cast-example
+    $ chmod +x cast-example
 
 If you run cast-example for the first time, you will see::
 
-  $ ./cast-example
-  ================================================================================
-  We found a big bad bug. Please try not to step on it!! Icky...
-  No worries. It will be fixed soon! :)
+    $ ./cast-example
+    ================================================================================
+    We found a big bad bug. Please try not to step on it!! Icky...
+    No worries. It will be fixed soon! :)
 
-  New messages on top as messages are displayed in same order as you see here
+    New messages on top as messages are displayed in same order as you see here
 
-  Version 0.1 has been released! Upgrade today to get cool features.
+    Version 0.1 has been released! Upgrade today to get cool features.
 
-  Version 0.2 has been released! If you upgrade, you will get:
-  1) Cool feature 1
-  2) Cool feature 2
-  So what are you waiting for? :)
+    Version 0.2 has been released! If you upgrade, you will get:
+    1) Cool feature 1
+    2) Cool feature 2
+    So what are you waiting for? :)
 
-  There is a small bug over there, so watch out!
-  ================================================================================
-  Hello World!
+    There is a small bug over there, so watch out!
+    ================================================================================
+    Hello World!
 
 And run it again::
 
-  $ cast-example
-  ================================================================================
-  We found a big bad bug. Please try not to step on it!! Icky...
-  No worries. It will be fixed soon! :)
-  ================================================================================
-  Hello World!
+    $ cast-example
+    ================================================================================
+    We found a big bad bug. Please try not to step on it!! Icky...
+    No worries. It will be fixed soon! :)
+    ================================================================================
+    Hello World!
 
 That's it!
 
