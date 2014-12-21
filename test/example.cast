@@ -4,8 +4,8 @@ message: We found a big bad bug. Please try not to step on it!! Icky...
 exit: true
 
 [Messages]
-msg3: Version 0.1 has been released! Upgrade today to get cool features.
-msg2: Version 0.2 has been released! If you upgrade, you will get:
+msg3: Version 0.2 has been released! Upgrade today to get cool features.
+msg2: Version 0.1 has been released! If you upgrade, you will get:
 
       1) Cool feature 1
       2) Cool feature 2
