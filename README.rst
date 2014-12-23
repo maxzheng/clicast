@@ -15,8 +15,9 @@ As easy as 1-2-3:
 2. Create your own cast file and make it accessible as an URL.
    I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast ::
 
-    # See 'cast -h' for more options to edit cast file.
     cast "New Message" -f example.cast
+
+    # See 'cast -h' for more options to edit cast file.
 
 3. Import and call check_message::
 
