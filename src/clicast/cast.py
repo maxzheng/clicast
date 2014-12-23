@@ -1,5 +1,6 @@
 from ConfigParser import ConfigParser
 import os
+import re
 from StringIO import StringIO
 import tempfile
 
@@ -15,9 +16,9 @@ class Cast(object):
 
   ALERT_SECTION = 'Alert'
   MESSAGES_SECTION = 'Messages'
-  REQUIRED_SECTIONS = (ALERT_SECTION, MESSAGES_SECTION)
   ALERT_MSG_KEY = 'message'
   ALERT_EXIT_KEY = 'exit'
+  MESSAGE_NEXT_KEY = '_next_key'
 
   class CastMessage(object):
     """ Represents a single message in a cast. """
@@ -29,15 +30,70 @@ class Cast(object):
       self.key = key
       self.message = message
 
-  def __init__(self, alert=None, alert_exit=False, messages=None):
+  def __init__(self, alert=None, alert_exit=False, messages=None, next_msg_key=None):
     """
     :param str alert: Alert message
     :param bool alert_exit: Should exit indicator for alert
     :param list(tuple) messages: List of tuple of (key, message)
+    :param str next_msg_key: Next message key to use
     """
     self.alert = alert
     self.alert_exit = alert_exit
     self.messages = messages and [self.CastMessage(*m) for m in messages] or []
+    self._next_msg_key = next_msg_key and int(next_msg_key)
+
+    # Always set this so that it can be used in :meth:`self.save`
+    if not self._next_msg_key:
+      self._next_msg_key = int(self.next_msg_key(reserve_next=False))
+
+  def add_msg(self, msg, alert=False, alert_exit=False):
+    """
+    :param str msg: The message to add or set
+    :param bool alert: Indicates this is the alert message to set.
+    :param bool alert_exit: Indicates this is the alert should request client to exit.
+    """
+    if alert or alert_exit:
+      self.alert = msg
+      self.alert_exit = alert_exit
+    else:
+      self.messages.append(self.CastMessage(self.next_msg_key(), msg))
+
+  def del_msg(self, count=1, alert=False):
+    if alert:
+      self.alert = None
+      self.alert_exit = None
+      return 1
+    else:
+      before_count = len(self.messages)
+      self.messages = self.messages[count:]
+      return before_count - len(self.messages)
+
+  def next_msg_key(self, reserve_next=True):
+    """
+      Returns the next message key and optionally reserves next one (default)
+
+      :param bool reserve_next: Indicates the key after next should be reserved. Default behavior.
+    """
+    if not self._next_msg_key:
+      keys = []
+
+      for m in self.messages:
+        try:
+          keys.append(int(m.key))
+        except Exception:
+          pass
+
+      if keys:
+        self._next_msg_key = keys[-1] + 1
+      else:
+        self._next_msg_key = 1
+
+    next_key = str(self._next_msg_key)
+
+    if reserve_next:
+      self._next_msg_key += 1
+
+    return next_key
 
   @classmethod
   def from_string(cls, cast):
@@ -46,24 +102,29 @@ class Cast(object):
     parser = ConfigParser()
     parser.readfp(cast_fp)
 
-    for section in cls.REQUIRED_SECTIONS:
-      if section not in parser.sections():
-        raise CastError('Missing "%s" section in cast file' % section)
-
     alert_msg = None
     alert_exit = None
 
-    for key, value in parser.items(cls.ALERT_SECTION):
-      if cls.ALERT_MSG_KEY == key:
-        alert_msg = value
-      elif cls.ALERT_EXIT_KEY == key:
-        alert_exit = bool(value)
-      else:
-        raise CastError('Invalid key "%s" in %s section', key, cls.ALERT_SECTION)
+    if cls.ALERT_SECTION in parser.sections():
+      for key, value in parser.items(cls.ALERT_SECTION):
+        if cls.ALERT_MSG_KEY == key:
+          alert_msg = value
+        elif cls.ALERT_EXIT_KEY == key:
+          alert_exit = bool(value)
+        else:
+          raise CastError('Invalid key "%s" in %s section', key, cls.ALERT_SECTION)
 
-    messages = parser.items(cls.MESSAGES_SECTION)
+    messages = []
+    next_msg_key = None
 
-    return cls(alert_msg, alert_exit, messages)
+    if cls.MESSAGES_SECTION in parser.sections():
+      for key, value in parser.items(cls.MESSAGES_SECTION):
+        if key == cls.MESSAGE_NEXT_KEY:
+          next_msg_key = value
+        else:
+          messages.append((key, value))
+
+    return cls(alert_msg, alert_exit, messages, next_msg_key)
 
   @classmethod
   def from_file(cls, cast_file):
@@ -77,6 +138,40 @@ class Cast(object):
     response = requests.get(cast_url)
     response.raise_for_status()
     return cls.from_string(response.text)
+
+  def __str__(self):
+    parser = ConfigParser()
+
+    if self.alert:
+      parser.add_section(self.ALERT_SECTION)
+      parser.set(self.ALERT_SECTION, self.ALERT_MSG_KEY, self.alert)
+      if self.alert_exit:
+        parser.set(self.ALERT_SECTION, self.ALERT_EXIT_KEY, True)
+
+    if self.messages:
+      parser.add_section(self.MESSAGES_SECTION)
+      for msg in self.messages:
+        parser.set(self.MESSAGES_SECTION, msg.key, msg.message)
+
+    elif self._next_msg_key:
+      parser.add_section(self.MESSAGES_SECTION)
+      parser.set(self.MESSAGES_SECTION, self.MESSAGE_NEXT_KEY, self._next_msg_key)
+
+    sio = StringIO()
+    parser.write(sio)
+
+    # And a bit of black magic to avoid writing our own parser / compensate for ConfigParser's lack of option
+    tabspaces = len(str(self._next_msg_key)) + 2 if self._next_msg_key else 3
+    content = sio.getvalue()
+    content = re.sub('^([\w]+) = ', '\\1: ', content, flags=re.MULTILINE)
+    content = re.sub('\t', ' ' * tabspaces, content)
+
+    return content.strip()
+
+  def save(self, cast_file):
+    """ Save the cast data to the given file. """
+    with open(cast_file, 'w') as fp:
+      fp.write(str(self) + '\n')
 
 
 class CastReader(object):

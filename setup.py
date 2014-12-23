@@ -13,6 +13,12 @@ setuptools.setup(
 
   description=open('README.rst').read(),
 
+  entry_points={
+    'console_scripts': [
+      'cast = clicast.editor:cast',
+    ],
+  },
+
   install_requires=[
     'requests',
   ],

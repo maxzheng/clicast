@@ -13,17 +13,20 @@ As easy as 1-2-3:
     pip install clicast
 
 2. Create your own cast file and make it accessible as an URL.
-   I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast
+   I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast ::
+
+   # See 'cast -h' for more options to edit cast file.
+   cast "New Message" -f example.cast
 
 3. Import and call check_message::
 
     from clicast import check_message
 
     def main():
-    check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast',
-                  allow_exit=True,
-                  header='=' * 80,
-                  footer='=' * 80)
+        check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast',
+                      allow_exit=True,
+                      header='=' * 80,
+                      footer='=' * 80)
 
 Try It Out
 ----------
@@ -39,8 +42,6 @@ If you run cast-example for the first time, you will see::
     ================================================================================
     We found a big bad bug. Please try not to step on it!! Icky...
     No worries. It will be fixed soon! :)
-
-    New messages on top as messages are displayed in same order as you see here
 
     Version 0.1 has been released! Upgrade today to get cool features.
 
