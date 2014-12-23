@@ -29,6 +29,11 @@ class Cast(object):
       """
       self.key = key
       self.message = message
+    def __cmp__(a, b):
+      try:
+        return cmp(int(a.key), int(b.key))
+      except Exception:
+        return cmp(a.key, b.key)
 
   def __init__(self, alert=None, alert_exit=False, messages=None, next_msg_key=None):
     """
@@ -39,11 +44,11 @@ class Cast(object):
     """
     self.alert = alert
     self.alert_exit = alert_exit
-    self.messages = messages and [self.CastMessage(*m) for m in messages] or []
+    self.messages = messages and sorted([self.CastMessage(*m) for m in messages]) or []
     self._next_msg_key = next_msg_key and int(next_msg_key)
 
     # Always set this so that it can be used in :meth:`self.save`
-    if not self._next_msg_key:
+    if self.messages and not self._next_msg_key:
       self._next_msg_key = int(self.next_msg_key(reserve_next=False))
 
   def add_msg(self, msg, alert=False, alert_exit=False):
@@ -163,7 +168,7 @@ class Cast(object):
     # And a bit of black magic to avoid writing our own parser / compensate for ConfigParser's lack of option
     tabspaces = len(str(self._next_msg_key)) + 2 if self._next_msg_key else 3
     content = sio.getvalue()
-    content = re.sub('^([\w]+) = ', '\\1: ', content, flags=re.MULTILINE)
+    content = _re_sub_multiline('^([\w]+) = ', '\\1: ', content)
     content = re.sub('\t', ' ' * tabspaces, content)
 
     return content.strip()
@@ -238,3 +243,16 @@ class CastReader(object):
 
     with open(self.READ_MSG_FILE, 'w') as fp:
       fp.write(' '.join(keys))
+
+
+def _re_sub_multiline(pattern, repl, string):
+  """ Simple hack to get multiline working in Python 2.6 and higher """
+  try:
+    content = re.sub(pattern, repl, string, flags=re.MULTILINE)
+  except Exception:
+    content = []
+    for line in string.split('\n'):
+      content.append(re.sub(pattern, repl, line))
+    content = '\n'.join(content)
+
+  return content
