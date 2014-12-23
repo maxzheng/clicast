@@ -2,6 +2,7 @@ from ConfigParser import ConfigParser
 import os
 import re
 from StringIO import StringIO
+import sys
 import tempfile
 
 import requests
@@ -182,7 +183,7 @@ class Cast(object):
 class CastReader(object):
   """ Reads a :class:`Cast` and keep track of read messages """
 
-  READ_MSG_FILE = os.path.join(tempfile.gettempdir(), 'clicast.read_messages')
+  READ_MSG_FILE = os.path.join(tempfile.gettempdir(), '%s.read_messages' % os.path.basename(sys.argv[0]))
 
   def __init__(self, cast):
     self.cast = cast
