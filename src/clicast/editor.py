@@ -44,22 +44,15 @@ def cast():
     count = cast.del_msg(args.delete, args.alert or args.alert_exit)
     cast.save(cast_file)
 
-    msg_word = 'alert message' if args.alert or args.alert_exit else ('messages' if count > 1 else 'message')
-    log.info('Deleted %d %s from %s', count, msg_word, cast_file)
-
   elif args.msg:
     cast.add_msg(args.msg, args.alert, args.alert_exit)
     cast.save(cast_file)
-
-    log.info('Added message to %s', cast_file)
 
   elif not os.path.exists(cast_file):
     log.error('%s does not exist', cast_file)
     sys.exit(1)
 
-  print '=' * 30, cast_file, '=' * 30
   print str(cast).strip()
-  print '=' * (62 + len(cast_file))
 
 def cast_info_from_path(cast_file=None):
   if cast_file:
