@@ -2,7 +2,7 @@
 An utility script to help create or edit cast files.
 
 Example Action                | Run Command
---------------------------------------------------------------
+==============================================================
 View current cast             | cast
 --------------------------------------------------------------
 Add a new message to new file | cast "New Message" -f new.cast
