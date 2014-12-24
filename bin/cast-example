@@ -5,6 +5,7 @@ from clicast import check_message
 
 def main():
   check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast',
+                cache_duration=60,
                 allow_exit=False,
                 raises=True,
                 header='=' * 80,

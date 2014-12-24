@@ -1,9 +1,14 @@
 import os
 import tempfile
+import time
 
+from mock import Mock, patch
 import pytest
 
-from clicast.cast import Cast, CastReader
+from clicast.cast import Cast, CastReader, url_content, _url_content_cache_file
+
+
+CAST_URL = 'https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast'
 
 
 class TestCast(object):
@@ -36,7 +41,7 @@ class TestCast(object):
         os.unlink(to_cast_file)
 
   def test_from_url(self):
-    cast = Cast.from_url('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast')
+    cast = Cast.from_url(CAST_URL)
     assert cast.messages
 
   def test_add_msg(self):
@@ -115,3 +120,42 @@ class TestCastReader(object):
       'So what are you waiting for? :)',
       'Version 0.2 has been released! Upgrade today to get cool features.',
       'There is a small bug over there, so watch out!']
+
+def test_url_content():
+  assert '[Messages]' in url_content(CAST_URL)
+
+  with patch('requests.get') as requests_get:
+    mock_response = Mock()
+    mock_response.text = '[Messages]\n1: Test Message'
+    requests_get.return_value = mock_response
+
+    assert str(url_content('url1', cache_duration=1)) == mock_response.text
+
+    cached_text = mock_response.text
+    mock_response.text = '[Messages]\n1: Test Message Updated'
+
+    # This should return cached content
+    assert str(url_content('url1', cache_duration=1)) == cached_text
+    requests_get.assert_called_once_with('url1')
+
+    assert str(url_content('url2', cache_duration=1)) == mock_response.text
+
+    time.sleep(1)
+
+    assert str(url_content('url1', cache_duration=1)) == mock_response.text
+    assert requests_get.call_count == 3
+
+    # No content,it should raise
+    cache_file = _url_content_cache_file('url3')
+    if os.path.exists(cache_file):
+      os.unlink(cache_file)
+
+    requests_get.side_effect = Exception
+    with pytest.raises(Exception):
+      assert str(url_content('url3', from_cache_on_error=True)) == mock_response.text
+
+    requests_get.side_effect = None
+    assert str(url_content('url3', from_cache_on_error=True)) == mock_response.text
+
+    requests_get.side_effect = Exception
+    assert str(url_content('url3', from_cache_on_error=True)) == mock_response.text
