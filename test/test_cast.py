@@ -6,15 +6,15 @@ from mock import Mock, patch
 import pytest
 
 from clicast.cast import Cast, CastReader, url_content, _url_content_cache_file
+from clicast.filters import match_cli_args
 
 
 CAST_URL = 'https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast'
-
+CAST_FILE = os.path.join(os.path.dirname(__file__), 'example.cast')
 
 class TestCast(object):
   def test_from_file(self):
-    cast_file = os.path.join(os.path.dirname(__file__), 'example.cast')
-    cast = Cast.from_file(cast_file)
+    cast = Cast.from_file(CAST_FILE)
 
     assert cast.alert == 'We found a big bad bug. Please try not to step on it!! Icky...\nNo worries. It will be fixed soon! :)'
     assert cast.alert_exit
@@ -24,12 +24,13 @@ class TestCast(object):
       '2) Cool feature 2\n'
       'So what are you waiting for? :)',
       'Version 0.2 has been released! Upgrade today to get cool features.',
-      'There is a small bug over there, so watch out!']
+      'There is a small bug over there, so watch out!',
+      '[\\b-f\\b] A bug that affects the -f option. (applies only if `clicast.filters.match_cli_args` filter is used)'
+    ]
 
   def test_save(self):
-    cast_file = os.path.join(os.path.dirname(__file__), 'example.cast')
-    from_content = open(cast_file).read()
-    cast = Cast.from_file(cast_file)
+    from_content = open(CAST_FILE).read()
+    cast = Cast.from_file(CAST_FILE)
 
     to_cast_file = os.path.join(tempfile.gettempdir(), 'clicast.to_file_test.cast')
     try:
@@ -101,6 +102,14 @@ class TestCast(object):
       if os.path.exists(cast_file):
         os.unlink(cast_file)
 
+  def test_filter(self):
+    def msg_filter(msg, alert=False):
+      if 'small bug' in msg:
+        return msg
+    cast = Cast.from_file(CAST_FILE, msg_filter)
+    assert str(cast) == '[Messages]\n3: There is a small bug over there, so watch out!'
+
+
 class TestCastReader(object):
   def setup_class(cls):
     CastReader.READ_MSG_FILE = '/tmp/clicast.test.read'
@@ -108,8 +117,7 @@ class TestCastReader(object):
       os.unlink(CastReader.READ_MSG_FILE)
 
   def test_new_messages(self):
-    cast_file = os.path.join(os.path.dirname(__file__), 'example.cast')
-    cast = Cast.from_file(cast_file)
+    cast = Cast.from_file(CAST_FILE)
 
     reader = CastReader(cast)
     assert reader.new_messages() == [
@@ -119,7 +127,9 @@ class TestCastReader(object):
       '2) Cool feature 2\n'
       'So what are you waiting for? :)',
       'Version 0.2 has been released! Upgrade today to get cool features.',
-      'There is a small bug over there, so watch out!']
+      'There is a small bug over there, so watch out!',
+      '[\\b-f\\b] A bug that affects the -f option. (applies only if `clicast.filters.match_cli_args` filter is used)'
+    ]
 
 def test_url_content():
   assert '[Messages]' in url_content(CAST_URL)
@@ -159,3 +169,11 @@ def test_url_content():
 
     requests_get.side_effect = Exception
     assert str(url_content('url3', from_cache_on_error=True)) == mock_response.text
+
+
+def test_match_cli_args():
+  msg_text = 'Message for -b option\nLine 2'
+  msg = '[ -b \w+] %s' % msg_text
+
+  assert match_cli_args(msg, cli_args='./cli-command -b bug -i issue') == msg_text
+  assert match_cli_args(msg, cli_args='./cli-command -i issue') == None

@@ -10,3 +10,4 @@ exit: True
    So what are you waiting for? :)
 2: Version 0.2 has been released! Upgrade today to get cool features.
 3: There is a small bug over there, so watch out!
+4: [-f\b] A bug that affects the -f option. (applies only if `clicast.filters.match_cli_args` filter is used)

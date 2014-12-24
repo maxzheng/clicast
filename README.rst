@@ -43,16 +43,16 @@ If you run cast-example for the first time, you will see::
     We found a big bad bug. Please try not to step on it!! Icky...
     No worries. It will be fixed soon! :)
 
-    Version 0.1 has been released! Upgrade today to get cool features.
-
-    Version 0.2 has been released! If you upgrade, you will get:
+    Version 0.1 has been released! If you upgrade, you will get:
     1) Cool feature 1
     2) Cool feature 2
     So what are you waiting for? :)
 
+    Version 0.2 has been released! Upgrade today to get cool features.
+
     There is a small bug over there, so watch out!
     ================================================================================
-    Hello World!
+    Hello World! Pass in '-f' to see message targeted for that option
 
 And run it again::
 
@@ -61,7 +61,18 @@ And run it again::
     We found a big bad bug. Please try not to step on it!! Icky...
     No worries. It will be fixed soon! :)
     ================================================================================
-    Hello World!
+    Hello World! Pass in '-f' to see message targeted for that option
+
+And now with -f option:
+
+    $ ./cast-example -f
+    ================================================================================
+    We found a big bad bug. Please try not to step on it!! Icky...
+    No worries. It will be fixed soon! :)
+
+    A bug that affects the -f option. (applies only if `clicast.filters.match_cli_args` filter is used)
+    ================================================================================
+    Hello World! Pass in '-f' to see message targeted for that option
 
 That's it!
 

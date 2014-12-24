@@ -41,12 +41,12 @@ class Cast(object):
   def __init__(self, alert=None, alert_exit=False, messages=None, next_msg_key=None):
     """
     :param str alert: Alert message
-    :param bool alert_exit: Should exit indicator for alert
+    :param bool alert_exit: Should client CLI exit. Ignored unless alert message is set.
     :param list(tuple) messages: List of tuple of (key, message)
     :param str next_msg_key: Next message key to use
     """
     self.alert = alert
-    self.alert_exit = alert_exit
+    self.alert_exit = alert and alert_exit
     self.messages = messages and sorted([self.CastMessage(*m) for m in messages]) or []
     self._next_msg_key = next_msg_key and int(next_msg_key)
 
@@ -104,8 +104,14 @@ class Cast(object):
     return next_key
 
   @classmethod
-  def from_string(cls, cast):
-    """ Create a :class:`Cast` from the given string. """
+  def from_string(cls, cast, msg_filter=None):
+    """ Create a :class:`Cast` from the given string.
+
+    :param str cast: Cast content
+    :param callable msg_filter: Filter messages with callable that accepts message string and alert boolean (True for
+                                alert message). It should return the original or an updated message, or None if the
+                                message should be ignored.
+    """
     cast_fp = StringIO(cast)
     parser = ConfigParser()
     parser.readfp(cast_fp)
@@ -116,6 +122,8 @@ class Cast(object):
     if cls.ALERT_SECTION in parser.sections():
       for key, value in parser.items(cls.ALERT_SECTION):
         if cls.ALERT_MSG_KEY == key:
+          if msg_filter:
+            value = msg_filter(value, True)
           alert_msg = value
         elif cls.ALERT_EXIT_KEY == key:
           alert_exit = bool(value)
@@ -130,20 +138,23 @@ class Cast(object):
         if key == cls.MESSAGE_NEXT_KEY:
           next_msg_key = value
         else:
-          messages.append((key, value))
+          if msg_filter:
+            value = msg_filter(value)
+          if value:
+            messages.append((key, value))
 
     return cls(alert_msg, alert_exit, messages, next_msg_key)
 
   @classmethod
-  def from_file(cls, cast_file):
+  def from_file(cls, cast_file, msg_filter=None):
     """ Create a :class:`Cast` from the given file. """
     with open(cast_file) as fp:
-      return cls.from_string(fp.read())
+      return cls.from_string(fp.read(), msg_filter)
 
   @classmethod
-  def from_url(cls, cast_url, cache_duration=None):
+  def from_url(cls, cast_url, msg_filter=None, cache_duration=None):
     """ Create a :class:`Cast` from the given url and optionally cache locally for given interval. """
-    return cls.from_string(url_content(cast_url, cache_duration))
+    return cls.from_string(url_content(cast_url, cache_duration), msg_filter)
 
   def __str__(self):
     parser = ConfigParser()
@@ -184,6 +195,12 @@ class CastReader(object):
   """ Reads a :class:`Cast` and keep track of read messages """
 
   READ_MSG_FILE = os.path.join(tempfile.gettempdir(), '%s.read_messages' % os.path.basename(sys.argv[0]))
+
+  @classmethod
+  def reset(cls):
+    """ Resets read messages, so all messages will be displayed again. """
+    if os.path.exists(cls.READ_MSG_FILE):
+      os.unlink(cls.READ_MSG_FILE)
 
   def __init__(self, cast):
     self.cast = cast
