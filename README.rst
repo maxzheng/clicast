@@ -63,7 +63,7 @@ And run it again::
     ================================================================================
     Hello World! Pass in '-f' to see message targeted for that option
 
-And now with -f option:
+And now with -f option::
 
     $ ./cast-example -f
     ================================================================================
