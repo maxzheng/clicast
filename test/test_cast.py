@@ -6,7 +6,6 @@ from mock import Mock, patch
 import pytest
 
 from clicast.cast import Cast, CastReader, url_content, _url_content_cache_file
-from clicast.filters import match_cli_args
 
 
 CAST_URL = 'https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast'
@@ -25,7 +24,7 @@ class TestCast(object):
       'So what are you waiting for? :)',
       'Version 0.2 has been released! Upgrade today to get cool features.',
       'There is a small bug over there, so watch out!',
-      '[\\b-f\\b] A bug that affects the -f option. (applies only if `clicast.filters.match_cli_args` filter is used)'
+      '[-f\\b] A bug that affects the -f option. (applies only if `clicast.filters.match_cli_args` filter is used)'
     ]
 
   def test_save(self):
@@ -128,7 +127,7 @@ class TestCastReader(object):
       'So what are you waiting for? :)',
       'Version 0.2 has been released! Upgrade today to get cool features.',
       'There is a small bug over there, so watch out!',
-      '[\\b-f\\b] A bug that affects the -f option. (applies only if `clicast.filters.match_cli_args` filter is used)'
+      '[-f\\b] A bug that affects the -f option. (applies only if `clicast.filters.match_cli_args` filter is used)'
     ]
 
 def test_url_content():
@@ -169,11 +168,3 @@ def test_url_content():
 
     requests_get.side_effect = Exception
     assert str(url_content('url3', from_cache_on_error=True)) == mock_response.text
-
-
-def test_match_cli_args():
-  msg_text = 'Message for -b option\nLine 2'
-  msg = '[ -b \w+] %s' % msg_text
-
-  assert match_cli_args(msg, cli_args='./cli-command -b bug -i issue') == msg_text
-  assert match_cli_args(msg, cli_args='./cli-command -i issue') == None
