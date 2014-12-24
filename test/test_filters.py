@@ -1,6 +1,6 @@
 import pytest
 
-from clicast.filters import match_cli_args, match_program_and_subcommands
+from clicast.filters import match_cli_args, match_program_and_subcommand
 
 
 def test_match_cli_args():
@@ -12,8 +12,8 @@ def test_match_cli_args():
 
 
 @pytest.mark.parametrize('msg', ['[program] Message', '[sc|subcommand] Message'])
-def test_match_program_and_sub_commands(msg):
-  assert match_program_and_subcommands(msg, cli_args='./program subcommand') == 'Message'
-  assert match_program_and_subcommands(msg, cli_args='./program sc') == 'Message'
-  assert match_program_and_subcommands(msg, cli_args='./anotherprogram prefixsubcommand -p program -s subcommand') == None
-  assert match_program_and_subcommands(msg, cli_args='./anotherprogram scsuffix -p program -s subcommand') == None
+def test_match_program_and_sub_command(msg):
+  assert match_program_and_subcommand(msg, cli_args='./program subcommand') == 'Message'
+  assert match_program_and_subcommand(msg, cli_args='./program sc') == 'Message'
+  assert match_program_and_subcommand(msg, cli_args='./anotherprogram prefixsubcommand -p program -s subcommand') == None
+  assert match_program_and_subcommand(msg, cli_args='./anotherprogram scsuffix -p program -s subcommand') == None

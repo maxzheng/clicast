@@ -7,7 +7,7 @@ REGEX_IN_MSG_RE = re.compile('^\[(.+)\] *(.+)$', flags=re.DOTALL)
 IS_WORD_RE = re.compile('^\w+$')
 
 
-def match_program_and_subcommands(msg, alert=False, cli_args=None):
+def match_program_and_subcommand(msg, alert=False, cli_args=None):
   """
   Look for messages that starts with "[program|sub-command] message" and search the program or sub-command against
   the the first two words in the given args (or in sys.argv).
