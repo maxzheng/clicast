@@ -35,7 +35,6 @@ def match_program_or_subcommand(msg, alert=False, cli_args=None):
     if len(cli_args) > 1 and IS_WORD_RE.match(cli_args[1]):
       commands.append(cli_args[1])
 
-    print 'args', commands
     match = any(re.search(regex, command) for command in commands)
     if not match:
       return None
