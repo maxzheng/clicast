@@ -22,7 +22,7 @@ def check_message(url, msg_filter=None, cache_duration=None, allow_exit=False, r
                          This is primarily used for testing / in development.
   :param bool reset: Reset read messages. All messages will be displayed again like the user runs this for the first
                      time
-  :param dict show_kwargs: kwargs to be passed to :meth:`CastReader.show_messages`
+  :param dict show_kwargs: kwargs to be passed to :meth:`clicast.CastReader.show_messages`
   """
 
   try:

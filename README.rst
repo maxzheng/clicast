@@ -4,7 +4,7 @@ clicast
 Broadcast messages for CLI tools, such as a warning for critical bug or notification about new features.
 
 How to Use
-----------
+==========
 
 As easy as 1-2-3:
 
@@ -29,7 +29,7 @@ As easy as 1-2-3:
                       footer='=' * 80)
 
 Try It Out
-----------
+==========
 
 Don't even want to write the bin script to try? I got you covered! :) ::
 
@@ -77,7 +77,9 @@ And now with -f option::
 That's it!
 
 Contribute / Report Bugs
--------------------------
+========================
+Documentation: http://clicast.readthedocs.org/
+
 Github project: https://github.com/maxzheng/clicast
 
 Report issues/bugs: https://github.com/maxzheng/clicast/issues

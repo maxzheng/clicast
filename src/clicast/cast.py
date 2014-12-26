@@ -67,6 +67,12 @@ class Cast(object):
       self.messages.append(self.CastMessage(self.next_msg_key(), msg))
 
   def del_msg(self, count=1, alert=False):
+    """
+    Delete message
+
+    :param int count: Number of messages to delete
+    :param bool alert: Delete the alert message. Param `count` is ignored.
+    """
     if alert:
       self.alert = None
       self.alert_exit = None
@@ -78,9 +84,9 @@ class Cast(object):
 
   def next_msg_key(self, reserve_next=True):
     """
-      Returns the next message key and optionally reserves next one (default)
-
       :param bool reserve_next: Indicates the key after next should be reserved. Default behavior.
+      :return: Next message key
+      :rtype str
     """
     if not self._next_msg_key:
       keys = []
@@ -111,6 +117,7 @@ class Cast(object):
     :param callable msg_filter: Filter messages with callable that accepts message string and alert boolean (True for
                                 alert message). It should return the original or an updated message, or None if the
                                 message should be ignored.
+    :rtype: :class:`Cast`
     """
     cast_fp = StringIO(cast)
     parser = ConfigParser()
@@ -229,7 +236,8 @@ class CastReader(object):
   def new_messages(self, mark_as_read=True):
     """
     :param bool mark_as_read: Mark new messages as read
-    :ret list(str): List of new messages with alert being the first if any.
+    :return: List of new messages with alert being the first if any.
+    :rtype: list(str)
     """
     read_keys = self._read_msg_keys()
     new_messages = [m for m in self.cast.messages if m.key not in read_keys]
