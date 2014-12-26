@@ -16,7 +16,7 @@ As easy as 1-2-3:
    I.e. https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast ::
 
     cast "New Message" -f example.cast
-    # See 'cast -h' for more options to edit cast file.
+    # See 'cast -h' for more options to edit cast file
 
 3. Import and call check_message::
 
