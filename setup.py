@@ -20,6 +20,7 @@ setuptools.setup(
   },
 
   install_requires=[
+    'markupsafe',  # readthedocs.org requires this to build doc
     'requests',
   ],
 
