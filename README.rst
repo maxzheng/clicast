@@ -18,7 +18,9 @@ As easy as 1-2-3:
     cast "New Message" -f example.cast
     # See 'cast -h' for more options to edit cast file.
 
-3. Import and call check_message::
+3. Import and call check_message:
+
+.. code-block:: python
 
     from clicast import check_message
 
