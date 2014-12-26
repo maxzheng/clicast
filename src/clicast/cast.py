@@ -210,10 +210,19 @@ class CastReader(object):
       os.unlink(cls.READ_MSG_FILE)
 
   def __init__(self, cast):
+    """
+    :param Cast cast: A :class:`Cast` instance
+    """
     self.cast = cast
 
   def show_messages(self, logger=None, header=None, footer=None):
-    """ Print new messages to stdout unless a logger is given. """
+    """
+    Show new messages
+
+    :param logging.Logger logger: Use logger to print the new messages instead of stdout
+    :param str header: Header to show before messages
+    :param str footer: Footer to show before messages
+    """
     msgs = self.new_messages()
 
     if msgs:
