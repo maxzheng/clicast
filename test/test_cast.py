@@ -101,12 +101,19 @@ class TestCast(object):
       if os.path.exists(cast_file):
         os.unlink(cast_file)
 
+  def test_set_msg_limit(self):
+    cast = Cast()
+    cast.set_msg_limit(2)
+    for x in range(10):
+      cast.add_msg('Message %d' % x)
+    assert str(cast) == '[Messages]\n9: Message 8\n10: Message 9\n_limit: 2'
+
   def test_filter(self):
     def msg_filter(msg, alert=False):
       if 'small bug' in msg:
         return msg
     cast = Cast.from_file(CAST_FILE, msg_filter)
-    assert str(cast) == '[Messages]\n3: There is a small bug over there, so watch out!'
+    assert str(cast) == '[Messages]\n3: There is a small bug over there, so watch out!\n_limit: 5'
 
 
 class TestCastReader(object):

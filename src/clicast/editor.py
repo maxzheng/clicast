@@ -28,13 +28,17 @@ log = logging.getLogger(__name__)
 
 def cast():
   parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-  parser.add_argument('msg', nargs='?', help='The message to cast')
   parser.add_argument('-a', '--alert', action='store_true', help='Indicates this is an alert message')
   parser.add_argument('-e', '--alert-exit', action='store_true', help='Indicates this is an alert message with exit = True')
-  parser.add_argument('-d', '--delete', type=int, metavar='NUM', nargs='?', const=1,
+  parser.add_argument('-f', '--file', help='New or existing cast file to update. Defaults to any cast file in current directory.')
+  group = parser.add_mutually_exclusive_group()
+  group.add_argument('msg', nargs='?', help='The message to cast')
+  group.add_argument('--delete', type=int, metavar='COUNT', nargs='?', const=1,
                       help='Delete the oldest message (default) or the number of messages (oldest first). '
                            'Use with --alert to remove the alert message')
-  parser.add_argument('-f', '--file', help='New or existing cast file to update. Defaults to any cast file in current directory.')
+  group.add_argument('--limit', type=int, metavar='COUNT',
+                      help='Set limit on total number of messages by deleting oldest message as new message is added '
+                           'when limit has been reached.')
 
   args = parser.parse_args()
 
@@ -42,15 +46,18 @@ def cast():
 
   if args.delete:
     count = cast.del_msg(args.delete, args.alert or args.alert_exit)
-    cast.save(cast_file)
+
+  elif args.limit:
+    cast.set_msg_limit(args.limit)
 
   elif args.msg:
     cast.add_msg(args.msg, args.alert, args.alert_exit)
-    cast.save(cast_file)
 
   elif not os.path.exists(cast_file):
     log.error('%s does not exist', cast_file)
     sys.exit(1)
+
+  cast.save(cast_file)
 
   print str(cast).strip()
 

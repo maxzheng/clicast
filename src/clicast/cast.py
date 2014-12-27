@@ -22,6 +22,7 @@ class Cast(object):
   ALERT_MSG_KEY = 'message'
   ALERT_EXIT_KEY = 'exit'
   MESSAGE_NEXT_KEY = '_next_key'
+  MESSAGE_LIMIT_KEY = '_limit'
 
   class CastMessage(object):
     """ Represents a single message in a cast. """
@@ -38,17 +39,19 @@ class Cast(object):
       except Exception:
         return cmp(a.key, b.key)
 
-  def __init__(self, alert=None, alert_exit=False, messages=None, next_msg_key=None):
+  def __init__(self, alert=None, alert_exit=False, messages=None, next_msg_key=None, msg_limit=None):
     """
     :param str alert: Alert message
     :param bool alert_exit: Should client CLI exit. Ignored unless alert message is set.
     :param list(tuple) messages: List of tuple of (key, message)
     :param str next_msg_key: Next message key to use
+    :param int msg_limit: Limit total number of messages by deleting oldest one.
     """
     self.alert = alert
     self.alert_exit = alert and alert_exit
     self.messages = messages and sorted([self.CastMessage(*m) for m in messages]) or []
     self._next_msg_key = next_msg_key and int(next_msg_key)
+    self.msg_limit = msg_limit
 
     # Always set this so that it can be used in :meth:`self.save`
     if self.messages and not self._next_msg_key:
@@ -65,6 +68,7 @@ class Cast(object):
       self.alert_exit = alert_exit
     else:
       self.messages.append(self.CastMessage(self.next_msg_key(), msg))
+      self.set_msg_limit(self.msg_limit)
 
   def del_msg(self, count=1, alert=False):
     """
@@ -109,6 +113,19 @@ class Cast(object):
 
     return next_key
 
+  def set_msg_limit(self, limit=None):
+    """
+    Limit total number of messages by deleting oldest message as new message is added when limit has been reached.
+
+    :param int limit: Number of message to limit. Defaults to infinite.
+    """
+    self.msg_limit = limit
+
+    if limit:
+      over_limit = len(self.messages) - limit
+      if over_limit > 0:
+        self.del_msg(over_limit)
+
   @classmethod
   def from_string(cls, cast, msg_filter=None):
     """ Create a :class:`Cast` from the given string.
@@ -139,18 +156,23 @@ class Cast(object):
 
     messages = []
     next_msg_key = None
+    msg_limit = None
 
     if cls.MESSAGES_SECTION in parser.sections():
       for key, value in parser.items(cls.MESSAGES_SECTION):
         if key == cls.MESSAGE_NEXT_KEY:
           next_msg_key = value
+        elif key == cls.MESSAGE_LIMIT_KEY:
+          msg_limit = int(value)
+        elif key.startswith('_'):
+          pass  # Ignore future private keys
         else:
           if msg_filter:
             value = msg_filter(value)
           if value:
             messages.append((key, value))
 
-    return cls(alert_msg, alert_exit, messages, next_msg_key)
+    return cls(alert_msg, alert_exit, messages, next_msg_key, msg_limit)
 
   @classmethod
   def from_file(cls, cast_file, msg_filter=None):
@@ -163,7 +185,7 @@ class Cast(object):
     """ Create a :class:`Cast` from the given url and optionally cache locally for given interval. """
     return cls.from_string(url_content(cast_url, cache_duration), msg_filter)
 
-  def __str__(self):
+  def __repr__(self):
     parser = ConfigParser()
 
     if self.alert:
@@ -180,6 +202,9 @@ class Cast(object):
     elif self._next_msg_key:
       parser.add_section(self.MESSAGES_SECTION)
       parser.set(self.MESSAGES_SECTION, self.MESSAGE_NEXT_KEY, self._next_msg_key)
+
+    if self.msg_limit:
+      parser.set(self.MESSAGES_SECTION, self.MESSAGE_LIMIT_KEY, self.msg_limit)
 
     sio = StringIO()
     parser.write(sio)
