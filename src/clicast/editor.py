@@ -34,18 +34,18 @@ def cast():
   group = parser.add_mutually_exclusive_group()
   group.add_argument('msg', nargs='?', help='The message to cast')
   group.add_argument('--delete', type=int, metavar='COUNT', nargs='?', const=1,
-                      help='Delete the oldest message (default) or the number of messages (oldest first). '
-                           'Use with --alert to remove the alert message')
+                     help='Delete the oldest message (default) or the number of messages (oldest first). '
+                          'Use with --alert to remove the alert message')
   group.add_argument('--limit', type=int, metavar='COUNT',
-                      help='Set limit on total number of messages by deleting oldest message as new message is added '
-                           'when limit has been reached.')
+                     help='Set limit on total number of messages by deleting oldest message as new message is added '
+                          'when limit has been reached.')
 
   args = parser.parse_args()
 
   cast, cast_file = cast_info_from_path(args.file)
 
   if args.delete:
-    count = cast.del_msg(args.delete, args.alert or args.alert_exit)
+    cast.del_msg(args.delete, args.alert or args.alert_exit)
 
   elif args.limit:
     cast.set_msg_limit(args.limit)
@@ -60,6 +60,7 @@ def cast():
   cast.save(cast_file)
 
   print str(cast).strip()
+
 
 def cast_info_from_path(cast_file=None):
   if cast_file:
@@ -83,4 +84,3 @@ def cast_info_from_path(cast_file=None):
     cast = Cast.from_file(cast_file)
 
   return cast, cast_file
-

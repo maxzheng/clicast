@@ -33,6 +33,7 @@ class Cast(object):
       """
       self.key = key
       self.message = message
+
     def __cmp__(a, b):
       try:
         return cmp(int(a.key), int(b.key))
@@ -352,7 +353,6 @@ def url_content(url, cache_duration=None, from_cache_on_error=False):
         return fp.read()
     else:
       raise
-
 
   if cache_duration or from_cache_on_error:
     with open(cache_file, 'w') as fp:

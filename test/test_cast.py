@@ -11,6 +11,7 @@ from clicast.cast import Cast, CastReader, url_content, _url_content_cache_file
 CAST_URL = 'https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast'
 CAST_FILE = os.path.join(os.path.dirname(__file__), 'example.cast')
 
+
 class TestCast(object):
   def test_from_file(self):
     cast = Cast.from_file(CAST_FILE)
@@ -51,7 +52,7 @@ class TestCast(object):
     cast.add_msg('Message 2')
 
     assert cast.alert == 'Message Alert'
-    assert cast.alert_exit == False
+    assert not cast.alert_exit
     assert [(m.key, m.message) for m in cast.messages] == [
       ('1', 'Message 1'),
       ('2', 'Message 2')
@@ -60,7 +61,7 @@ class TestCast(object):
     cast.add_msg('Message Alert Exit', alert_exit=True)
 
     assert cast.alert == 'Message Alert Exit'
-    assert cast.alert_exit == True
+    assert cast.alert_exit
 
   def test_del_msg(self):
     cast = Cast()
@@ -70,7 +71,7 @@ class TestCast(object):
     cast.del_msg()
 
     assert cast.alert == 'Message Alert'
-    assert cast.alert_exit == True
+    assert cast.alert_exit
     assert [(m.key, m.message) for m in cast.messages] == [('2', 'Message 2')]
 
     del_count = cast.del_msg(100)
@@ -136,6 +137,7 @@ class TestCastReader(object):
       'There is a small bug over there, so watch out!',
       '[-f\\b] A bug that affects the -f option. (applies only if `clicast.filters.match_cli_args` filter is used)'
     ]
+
 
 def test_url_content():
   assert '[Messages]' in url_content(CAST_URL)
