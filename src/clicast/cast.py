@@ -91,7 +91,7 @@ class Cast(object):
     """
       :param bool reserve_next: Indicates the key after next should be reserved. Default behavior.
       :return: Next message key
-      :rtype str
+      :rtype: str
     """
     if not self._next_msg_key:
       keys = []

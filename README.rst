@@ -76,10 +76,15 @@ And now with -f option::
 
 That's it!
 
-Contribute / Report Bugs
+More
 ========================
+
 Documentation: http://clicast.readthedocs.org/
 
 Github project: https://github.com/maxzheng/clicast
 
 Report issues/bugs: https://github.com/maxzheng/clicast/issues
+
+LinkedIn: https://www.linkedin.com/in/maxzheng
+
+Email: maxzheng.os @t gmail.com
