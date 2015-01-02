@@ -3,8 +3,8 @@ clicast
 
 Broadcast messages for CLI tools, such as a warning for critical bug or notification about new features.
 
-How to Use
-==========
+Quick Start Tutorial
+====================
 
 As easy as 1-2-3:
 
@@ -77,7 +77,7 @@ And now with -f option::
 That's it!
 
 More
-========================
+====
 
 Documentation: http://clicast.readthedocs.org/
 
