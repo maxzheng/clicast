@@ -2,7 +2,7 @@ import pytest
 import subprocess
 
 
-@pytest.mark.parametrize("script", [])
+@pytest.mark.parametrize("script", ['bin/cast-example'])
 def test_script(script):
 
   try:
