@@ -79,8 +79,8 @@ That's it!
 More
 ====
 
-| Changes: http://clicast.readthedocs.org/en/latest/CHANGELOG.html
 | Documentation: http://clicast.readthedocs.org/
+| Changes: http://clicast.readthedocs.org/en/latest/CHANGELOG.html
 |
 | PyPi: https://pypi.python.org/pypi/clicast
 | GitHub Project: https://github.com/maxzheng/clicast
