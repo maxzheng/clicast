@@ -144,7 +144,7 @@ class Cast(object):
     alert_msg = None
     alert_exit = None
 
-    if cls.ALERT_SECTION.lower() in config:
+    if cls.ALERT_SECTION in config:
       for key, value in config.items(cls.ALERT_SECTION):
         if cls.ALERT_MSG_KEY == key:
           if msg_filter:
@@ -159,7 +159,7 @@ class Cast(object):
     next_msg_key = None
     msg_limit = None
 
-    if cls.MESSAGES_SECTION.lower() in config:
+    if cls.MESSAGES_SECTION in config:
       for key, value in config.items(cls.MESSAGES_SECTION):
         if key == cls.MESSAGE_NEXT_KEY:
           next_msg_key = value
