@@ -135,8 +135,8 @@ class Cast(object):
     :param callable msg_filter: Filter messages with callable that accepts message string and alert boolean (True for
                                 alert message). It should return the original or an updated message, or None if the
                                 message should be ignored.
-      :param int cache_duration: For cast URL only. Optionally cache the URL content for the given duration (seconds) to
-                                 avoid downloading too often.
+    :param int cache_duration: For cast URL only. Optionally cache the URL content for the given duration (seconds) to
+                               avoid downloading too often.
     :rtype: :class:`Cast`
     """
     config = RemoteConfig(context, compact_form=True)

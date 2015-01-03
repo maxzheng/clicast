@@ -28,8 +28,8 @@ As easy as 1-2-3:
                       header='=' * 80,
                       footer='=' * 80)
 
-Try It Out
-==========
+CLI Example
+============
 
 Don't even want to write the bin script to try? I got you covered! :) ::
 
@@ -79,14 +79,12 @@ That's it!
 More
 ====
 
-Documentation: http://clicast.readthedocs.org/
-
-PyPi: https://pypi.python.org/pypi/clicast
-
-GitHub Project: https://github.com/maxzheng/clicast
-
-Report Issues/Bugs: https://github.com/maxzheng/clicast/issues
-
-Connect: https://www.linkedin.com/in/maxzheng
-
-Contact: maxzheng.os @t gmail.com
+| Changes: :doc:`CHANGELOG`
+| Documentation: http://clicast.readthedocs.org/
+|
+| PyPi: https://pypi.python.org/pypi/clicast
+| GitHub Project: https://github.com/maxzheng/clicast
+| Report Issues/Bugs: https://github.com/maxzheng/clicast/issues
+|
+| Connect: https://www.linkedin.com/in/maxzheng
+| Contact: maxzheng.os @t gmail.com
