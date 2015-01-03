@@ -79,7 +79,7 @@ That's it!
 More
 ====
 
-| Changes: :doc:`CHANGELOG`
+| Changes: http://clicast.readthedocs.org/en/latest/CHANGELOG.html
 | Documentation: http://clicast.readthedocs.org/
 |
 | PyPi: https://pypi.python.org/pypi/clicast
