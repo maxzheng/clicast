@@ -1,5 +1,4 @@
 import base64
-from ConfigParser import ConfigParser
 import os
 import re
 from StringIO import StringIO
@@ -7,6 +6,7 @@ import sys
 import time
 import tempfile
 
+from remoteconfig import RemoteConfig
 import requests
 
 
@@ -28,10 +28,10 @@ class Cast(object):
     """ Represents a single message in a cast. """
     def __init__(self, key, message):
       """
-      :param str key: Message key
+      :param key: Message key
       :param str message: The actual message
       """
-      self.key = key
+      self.key = str(key)
       self.message = message
 
     def __cmp__(a, b):
@@ -45,18 +45,18 @@ class Cast(object):
     :param str alert: Alert message
     :param bool alert_exit: Should client CLI exit. Ignored unless alert message is set.
     :param list(tuple) messages: List of tuple of (key, message)
-    :param str next_msg_key: Next message key to use
+    :param int next_msg_key: Next message key to use
     :param int msg_limit: Limit total number of messages by deleting oldest one.
     """
     self.alert = alert
     self.alert_exit = alert and alert_exit
     self.messages = messages and sorted([self.CastMessage(*m) for m in messages]) or []
-    self._next_msg_key = next_msg_key and int(next_msg_key)
+    self._next_msg_key = next_msg_key
     self.msg_limit = msg_limit
 
     # Always set this so that it can be used in :meth:`self.save`
     if self.messages and not self._next_msg_key:
-      self._next_msg_key = int(self.next_msg_key(reserve_next=False))
+      self._next_msg_key = self.next_msg_key(reserve_next=False)
 
   def add_msg(self, msg, alert=False, alert_exit=False):
     """
@@ -91,7 +91,7 @@ class Cast(object):
     """
       :param bool reserve_next: Indicates the key after next should be reserved. Default behavior.
       :return: Next message key
-      :rtype: str
+      :rtype: int
     """
     if not self._next_msg_key:
       keys = []
@@ -107,7 +107,7 @@ class Cast(object):
       else:
         self._next_msg_key = 1
 
-    next_key = str(self._next_msg_key)
+    next_key = self._next_msg_key
 
     if reserve_next:
       self._next_msg_key += 1
@@ -128,30 +128,30 @@ class Cast(object):
         self.del_msg(over_limit)
 
   @classmethod
-  def from_string(cls, cast, msg_filter=None):
-    """ Create a :class:`Cast` from the given string.
+  def from_content(cls, context, msg_filter=None, cache_duration=None):
+    """ Create a :class:`Cast` from the given content
 
-    :param str cast: Cast content
+    :param str context: Cast content string, file, or URL
     :param callable msg_filter: Filter messages with callable that accepts message string and alert boolean (True for
                                 alert message). It should return the original or an updated message, or None if the
                                 message should be ignored.
+      :param int cache_duration: For cast URL only. Optionally cache the URL content for the given duration (seconds) to
+                                 avoid downloading too often.
     :rtype: :class:`Cast`
     """
-    cast_fp = StringIO(cast)
-    parser = ConfigParser()
-    parser.readfp(cast_fp)
+    config = RemoteConfig(context, compact_form=True)
 
     alert_msg = None
     alert_exit = None
 
-    if cls.ALERT_SECTION in parser.sections():
-      for key, value in parser.items(cls.ALERT_SECTION):
+    if cls.ALERT_SECTION.lower() in config:
+      for key, value in config.items(cls.ALERT_SECTION):
         if cls.ALERT_MSG_KEY == key:
           if msg_filter:
             value = msg_filter(value, True)
           alert_msg = value
         elif cls.ALERT_EXIT_KEY == key:
-          alert_exit = bool(value)
+          alert_exit = value
         else:
           raise CastError('Invalid key "%s" in %s section', key, cls.ALERT_SECTION)
 
@@ -159,12 +159,12 @@ class Cast(object):
     next_msg_key = None
     msg_limit = None
 
-    if cls.MESSAGES_SECTION in parser.sections():
-      for key, value in parser.items(cls.MESSAGES_SECTION):
+    if cls.MESSAGES_SECTION.lower() in config:
+      for key, value in config.items(cls.MESSAGES_SECTION):
         if key == cls.MESSAGE_NEXT_KEY:
           next_msg_key = value
         elif key == cls.MESSAGE_LIMIT_KEY:
-          msg_limit = int(value)
+          msg_limit = value
         elif key.startswith('_'):
           pass  # Ignore future private keys
         else:
@@ -175,19 +175,8 @@ class Cast(object):
 
     return cls(alert_msg, alert_exit, messages, next_msg_key, msg_limit)
 
-  @classmethod
-  def from_file(cls, cast_file, msg_filter=None):
-    """ Create a :class:`Cast` from the given file. """
-    with open(cast_file) as fp:
-      return cls.from_string(fp.read(), msg_filter)
-
-  @classmethod
-  def from_url(cls, cast_url, msg_filter=None, cache_duration=None):
-    """ Create a :class:`Cast` from the given url and optionally cache locally for given interval. """
-    return cls.from_string(url_content(cast_url, cache_duration), msg_filter)
-
   def __repr__(self):
-    parser = ConfigParser()
+    parser = RemoteConfig(kv_sep=': ', compact_form=True)
 
     if self.alert:
       parser.add_section(self.ALERT_SECTION)
@@ -207,16 +196,9 @@ class Cast(object):
     if self.msg_limit:
       parser.set(self.MESSAGES_SECTION, self.MESSAGE_LIMIT_KEY, self.msg_limit)
 
-    sio = StringIO()
-    parser.write(sio)
+    parser._indent_spaces = len(str(self._next_msg_key)) + 2 if self._next_msg_key else 3
 
-    # And a bit of black magic to avoid writing our own parser / compensate for ConfigParser's lack of option
-    tabspaces = len(str(self._next_msg_key)) + 2 if self._next_msg_key else 3
-    content = sio.getvalue()
-    content = _re_sub_multiline('^([\w]+) = ', '\\1: ', content)
-    content = re.sub('\t', ' ' * tabspaces, content)
-
-    return content.strip()
+    return str(parser).strip()
 
   def save(self, cast_file):
     """ Save the cast data to the given file. """

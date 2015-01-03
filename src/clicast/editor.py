@@ -65,7 +65,7 @@ def cast():
 def cast_info_from_path(cast_file=None):
   if cast_file:
     if os.path.exists(cast_file):
-      cast = Cast.from_file(cast_file)
+      cast = Cast.from_content(cast_file)
     else:
       cast = Cast()
 
@@ -81,6 +81,6 @@ def cast_info_from_path(cast_file=None):
       sys.exit(1)
 
     cast_file = cast_files[0]
-    cast = Cast.from_file(cast_file)
+    cast = Cast.from_content(cast_file)
 
   return cast, cast_file

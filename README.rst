@@ -81,10 +81,12 @@ More
 
 Documentation: http://clicast.readthedocs.org/
 
-Github project: https://github.com/maxzheng/clicast
+PyPi: https://pypi.python.org/pypi/clicast
 
-Report issues/bugs: https://github.com/maxzheng/clicast/issues
+GitHub Project: https://github.com/maxzheng/clicast
 
-LinkedIn: https://www.linkedin.com/in/maxzheng
+Report Issues/Bugs: https://github.com/maxzheng/clicast/issues
 
-Email: maxzheng.os @t gmail.com
+Connect: https://www.linkedin.com/in/maxzheng
+
+Contact: maxzheng.os @t gmail.com

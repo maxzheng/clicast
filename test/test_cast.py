@@ -14,7 +14,7 @@ CAST_FILE = os.path.join(os.path.dirname(__file__), 'example.cast')
 
 class TestCast(object):
   def test_from_file(self):
-    cast = Cast.from_file(CAST_FILE)
+    cast = Cast.from_content(CAST_FILE)
 
     assert cast.alert == 'We found a big bad bug. Please try not to step on it!! Icky...\nNo worries. It will be fixed soon! :)'
     assert cast.alert_exit
@@ -30,7 +30,7 @@ class TestCast(object):
 
   def test_save(self):
     from_content = open(CAST_FILE).read()
-    cast = Cast.from_file(CAST_FILE)
+    cast = Cast.from_content(CAST_FILE)
 
     to_cast_file = os.path.join(tempfile.gettempdir(), 'clicast.to_file_test.cast')
     try:
@@ -42,8 +42,12 @@ class TestCast(object):
         os.unlink(to_cast_file)
 
   def test_from_url(self):
-    cast = Cast.from_url(CAST_URL)
+    cast = Cast.from_content(CAST_URL)
     assert cast.messages
+
+    from remoteconfig import RemoteConfig
+    c = RemoteConfig(CAST_URL)
+    assert str(c)
 
   def test_add_msg(self):
     cast = Cast()
@@ -90,11 +94,11 @@ class TestCast(object):
     cast_file = os.path.join(tempfile.gettempdir(), 'clicast.to_file_test.cast')
     try:
       cast.save(cast_file)
-      cast = Cast.from_file(cast_file)
+      cast = Cast.from_content(cast_file)
       cast.del_msg(100)
 
       cast.save(cast_file)
-      cast = Cast.from_file(cast_file)
+      cast = Cast.from_content(cast_file)
       cast.add_msg('Message 6')
 
       assert str(cast) == '[Messages]\n6: Message 6'
@@ -113,7 +117,7 @@ class TestCast(object):
     def msg_filter(msg, alert=False):
       if 'small bug' in msg:
         return msg
-    cast = Cast.from_file(CAST_FILE, msg_filter)
+    cast = Cast.from_content(CAST_FILE, msg_filter)
     assert str(cast) == '[Messages]\n3: There is a small bug over there, so watch out!\n_limit: 5'
 
 
@@ -124,7 +128,7 @@ class TestCastReader(object):
       os.unlink(CastReader.READ_MSG_FILE)
 
   def test_new_messages(self):
-    cast = Cast.from_file(CAST_FILE)
+    cast = Cast.from_content(CAST_FILE)
 
     reader = CastReader(cast)
     assert reader.new_messages() == [

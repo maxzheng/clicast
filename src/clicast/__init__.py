@@ -27,9 +27,9 @@ def check_message(url, msg_filter=None, cache_duration=None, allow_exit=False, r
 
   try:
     if local_file and os.path.exists(local_file):
-      cast = Cast.from_file(local_file, msg_filter)
+      cast = Cast.from_content(local_file, msg_filter)
     else:
-      cast = Cast.from_url(url, msg_filter, cache_duration)
+      cast = Cast.from_content(url, msg_filter, cache_duration)
 
     if reset:
       CastReader.reset()
