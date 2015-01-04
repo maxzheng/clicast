@@ -21,6 +21,14 @@ API Documentation
    api/clicast
    api/cast
 
+Change Log
+=================
+
+.. toctree::
+   :maxdepth: 1
+
+   CHANGELOG
+
 Indices and tables
 ==================
 
