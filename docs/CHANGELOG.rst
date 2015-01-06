@@ -1,5 +1,11 @@
-Version 0.4.4
+Version 0.4.5
 ================================================================================
+
+* Actually set cache_duration on RemoteConfig and remove unused url_content()
+
+
+Version 0.4.4
+--------------------------------------------------------------------------------
 
 * Add changelog to index
 
