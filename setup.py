@@ -19,10 +19,7 @@ setuptools.setup(
     ],
   },
 
-  install_requires=[
-    'remoteconfig',
-    'requests',
-  ],
+  install_requires=open('requirements.txt').read(),
 
   license='MIT',
 
