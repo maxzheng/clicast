@@ -1,2 +1,3 @@
 remoteconfig
 requests
+simplejson
