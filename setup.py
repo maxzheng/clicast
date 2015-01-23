@@ -1,6 +1,5 @@
 #!/usr/bin/env python2.6
 
-import os
 import setuptools
 
 
@@ -28,8 +27,6 @@ setuptools.setup(
   include_package_data=True,
 
   setup_requires=['setuptools-git'],
-
-#  scripts=['bin/cast-example'],
 
   classifiers=[
     'Development Status :: 5 - Production/Stable',

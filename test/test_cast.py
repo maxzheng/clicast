@@ -1,9 +1,5 @@
 import os
 import tempfile
-import time
-
-from mock import Mock, patch
-import pytest
 
 from clicast.cast import Cast, CastReader
 

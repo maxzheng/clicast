@@ -1,13 +1,9 @@
-import base64
 import os
 import re
-from StringIO import StringIO
 import sys
-import time
 import tempfile
 
 from remoteconfig import RemoteConfig
-import requests
 
 
 class CastError(Exception):
