@@ -10,7 +10,10 @@ setuptools.setup(
   author='Max Zheng',
   author_email='maxzheng.os @t gmail.com',
 
-  description=open('README.rst').read(),
+  description='Broadcast messages for CLI tools, such as a warning for critical bug or notification about new features.',
+  long_description=open('README.rst').read(),
+
+  url='https://github.com/maxzheng/clicast',
 
   entry_points={
     'console_scripts': [
@@ -32,7 +35,7 @@ setuptools.setup(
     'Development Status :: 5 - Production/Stable',
 
     'Intended Audience :: Developers',
-    'Topic :: Software Development :: Development Tools',
+    'Topic :: Software Development',
 
     'License :: OSI Approved :: MIT License',
 
