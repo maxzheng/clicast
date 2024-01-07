@@ -1,7 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
-import sys
 
 from clicast import check_message
 from clicast.filters import match_cli_args
@@ -16,7 +15,7 @@ def main():
   args = parser.parse_args()
 
   try:
-    check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast',
+    check_message('https://raw.githubusercontent.com/maxzheng/clicast/master/tests/example.cast',
                   msg_filter=match_cli_args,
                   cache_duration=60,
                   allow_exit=False,
@@ -26,10 +25,10 @@ def main():
                   header='=' * 80,
                   footer='=' * 80)
   except Exception as e:
-    log.debug(e)  # Using a try/except with raises=args.debug is a nice way to figure out why a cast isn't working
-                  # instead of plainly setting raises=False in production. Either way works well.
+    if args.debug:          # Using a try/except with raises=args.debug is a nice way to figure out why a cast isn't
+      print('Error:', e)    # working instead of plainly setting raises=False in production. Either way works well.
 
-  print "Hello World! Pass in '-f' to see message targeted for that option"
+  print("Hello World! Pass in '-f' to see message targeted for that option")
 
 
 if __name__ == '__main__':

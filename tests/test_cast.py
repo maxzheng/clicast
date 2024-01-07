@@ -4,7 +4,7 @@ import tempfile
 from clicast.cast import Cast, CastReader
 
 
-CAST_URL = 'https://raw.githubusercontent.com/maxzheng/clicast/master/test/example.cast'
+CAST_URL = 'https://raw.githubusercontent.com/maxzheng/clicast/master/tests/example.cast'
 CAST_FILE = os.path.join(os.path.dirname(__file__), 'example.cast')
 
 

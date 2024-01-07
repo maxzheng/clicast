@@ -5,7 +5,7 @@ from clicast.filters import match_cli_args, match_program_or_subcommand
 
 def test_match_cli_args():
   msg_text = 'Message for -b option\nLine 2'
-  msg = '[ -b \w+] %s' % msg_text
+  msg = r'[ -b \w+] %s' % msg_text
 
   assert match_cli_args(msg, cli_args='./cli-command -b bug -i issue') == msg_text
   assert match_cli_args(msg, cli_args='./cli-command -i issue') is None

@@ -59,7 +59,7 @@ def cast():
 
   cast.save(cast_file)
 
-  print str(cast).strip()
+  print(str(cast).strip())
 
 
 def cast_info_from_path(cast_file=None):

@@ -3,8 +3,8 @@ import re
 import sys
 
 
-REGEX_IN_MSG_RE = re.compile('^\[(.+)\] *(.+)$', flags=re.DOTALL)
-IS_WORD_RE = re.compile('^\w+$')
+REGEX_IN_MSG_RE = re.compile(r'^\[(.+)\] *(.+)$', flags=re.DOTALL)
+IS_WORD_RE = re.compile(r'^\w+$')
 
 
 def match_program_or_subcommand(msg, alert=False, cli_args=None):

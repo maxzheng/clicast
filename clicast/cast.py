@@ -1,3 +1,4 @@
+from functools import total_ordering
 import os
 import re
 import sys
@@ -20,6 +21,7 @@ class Cast(object):
   MESSAGE_NEXT_KEY = '_next_key'
   MESSAGE_LIMIT_KEY = '_limit'
 
+  @total_ordering
   class CastMessage(object):
     """ Represents a single message in a cast. """
     def __init__(self, key, message):
@@ -30,11 +32,14 @@ class Cast(object):
       self.key = str(key)
       self.message = message
 
-    def __cmp__(a, b):
+    def __eq__(self, other):
+      return self.key == other.key
+
+    def __lt__(self, other):
       try:
-        return cmp(int(a.key), int(b.key))
+        return int(self.key) < int(other.key)
       except Exception:
-        return cmp(a.key, b.key)
+        return self.key < other.key
 
   def __init__(self, alert=None, alert_exit=False, messages=None, next_msg_key=None, msg_limit=None):
     """
@@ -241,10 +246,10 @@ class CastReader(object):
 
       else:
         if header:
-          print header
-        print '\n\n'.join(msgs)
+          print(header)
+        print('\n\n'.join(msgs))
         if footer:
-          print footer
+          print(footer)
 
   def new_messages(self, mark_as_read=True):
     """
