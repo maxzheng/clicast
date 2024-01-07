@@ -241,10 +241,10 @@ class CastReader(object):
 
       else:
         if header:
-          print header
-        print '\n\n'.join(msgs)
+          print(header)
+        print('\n\n'.join(msgs))
         if footer:
-          print footer
+          print(footer)
 
   def new_messages(self, mark_as_read=True):
     """
